@@ -1031,7 +1031,9 @@
           
           // 1. Calculate Lat/Long and format the HTML string
           const geoClickPt = webMercatorUtils.webMercatorToGeographic(event.mapPoint);
-          const coordHtml = `<div style="margin-bottom: 10px; font-size: 15px; background-color: #e6e6e6; padding: 8px; border-radius: 4px; border-left: 5px solid #333333; color: #111;"><b>Lat/Long:</b> ${geoClickPt.latitude.toFixed(6)}, ${geoClickPt.longitude.toFixed(6)}</div>`;
+          const svLatLng = `${geoClickPt.latitude.toFixed(6)},${geoClickPt.longitude.toFixed(6)}`;
+          const coordHtml = `<div style="margin-bottom: 10px; font-size: 15px; background-color: #e6e6e6; padding: 8px; border-radius: 4px; border-left: 5px solid #333333; color: #111;"><b>Lat/Long:</b> ${geoClickPt.latitude.toFixed(6)}, ${geoClickPt.longitude.toFixed(6)}
+            <div><a class="details-btn" style="display: inline-flex; align-items: center; text-decoration: none; background-color: #333333;" href="https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${svLatLng}" target="_blank" rel="noopener noreferrer" aria-label="Open Google Streetview at this location (opens in a new tab)">Google Streetview</a></div></div>`;
 
           // 2. Add coordHtml to the "No routes found" message
           if (mResults.features.length === 0) { 
