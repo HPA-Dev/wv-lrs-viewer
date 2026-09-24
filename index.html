@@ -1147,6 +1147,24 @@
       document.getElementById("btnClear").addEventListener("click", () => { highlightLayer.removeAll(); document.getElementById("resultsList").innerHTML = "<p style='color: #333333; font-weight: bold;'>Click a route on the map or use one of the search tools above.</p>"; });
       document.getElementById("btnCloseInfo").addEventListener("click", () => { document.getElementById("infoPanel").style.display = "none"; highlightLayer.removeAll(); });
 
+      // Deep link: ?route=<ROUTEID>&from=<MP>&to=<MP>&basemap=imagery opens Find Measure at that
+      // stretch, exactly as if it had been typed in and located. from/to are optional (the whole
+      // route is shown without them); basemap=imagery switches to the WV leaf-off basemap. The
+      // route ID is checked against the CO_ROUTEID pattern before use, because Locate builds a
+      // query from it.
+      view.when(() => {
+        const params = new URLSearchParams(window.location.search);
+        const routeId = (params.get("route") || "").trim().toUpperCase();
+        if (!/^[0-9A-Z]{13,17}$/.test(routeId)) return;
+        const measure = (key) => { const v = parseFloat(params.get(key)); return Number.isFinite(v) && v >= 0 ? v.toFixed(3) : ""; };
+        if ((params.get("basemap") || "").toLowerCase() === "imagery") map.basemap = wvImageryBasemap;
+        document.getElementById("ctxRouteID").value = routeId;
+        document.getElementById("ctxBMPRef").value = measure("from");
+        document.getElementById("ctxEMPRef").value = measure("to");
+        contextExpand.expanded = true;
+        document.getElementById("btnCtxLocate").click();
+      });
+
     });
   </script>
 
